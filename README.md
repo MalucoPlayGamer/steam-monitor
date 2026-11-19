@@ -7,4 +7,4 @@ Automatically published by MalucoPlayGamer steam-monitor.
 | Channel | Version | Updated (UTC) |
 | --- | --- | --- |
 | Stable | 1794536281 | 2026-11-13 02:18:01 UTC |
-| Beta | 1794536281 | 2026-11-13 02:18:01 UTC |
+| Beta | 1795048523 | 2026-11-19 00:35:23 UTC |
