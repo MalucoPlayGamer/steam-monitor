@@ -11,24 +11,24 @@ fencepost = "0xD7058CA5"
 argc = 0
 
 [IClientUser.GetAppOwnershipTicketExtendedData]
-method_index = 105
-funcHash = "0x5578709F"
-wrapper_rva = "0x781400"
-fencepost = "0x55D3418F"
+method_index = 106
+funcHash = "0xC7E71244"
+wrapper_rva = "0x7815B0"
+fencepost = "0xC844D740"
 argc = 2
 
 [IClientUser.RequestEncryptedAppTicket]
-method_index = 120
-funcHash = "0xBBB80477"
-wrapper_rva = "0x74E130"
-fencepost = "0xBC2703B9"
-argc = 2
-
-[IClientUser.GetEncryptedAppTicket]
 method_index = 121
 funcHash = "0x25D6BB1C"
 wrapper_rva = "0x884EC0"
 fencepost = "0x2646F563"
+argc = 2
+
+[IClientUser.GetEncryptedAppTicket]
+method_index = 122
+funcHash = "0xE0468CB5"
+wrapper_rva = "0x794140"
+fencepost = "0xE0B84102"
 argc = 1
 
 [IClientUtils]
