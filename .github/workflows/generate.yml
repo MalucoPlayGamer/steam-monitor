@@ -1,0 +1,89 @@
+name: Steam Monitor
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force re-download and re-resolve all channels'
+        type: boolean
+        default: false
+
+concurrency:
+  group: steam-monitor-run
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    name: Check Valve Updates & Generate Metadata
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # Checkout do repositório público: será o destino do versions.json.
+      - name: Checkout Public Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Busca apenas o código-fonte privado que contém monitor.py.
+      - name: Checkout Private Monitor Source
+        uses: actions/checkout@v4
+        with:
+          repository: MalucoPlayGamer/Monitor
+          ref: main
+          token: ${{ secrets.MONITOR_READ_TOKEN }}
+          path: private-monitor
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Configure Git Identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Executa o mesmo monitor.py do repositório privado.
+      # GITHUB_REPOSITORY aponta para o repositório público que disparou este workflow.
+      - name: Run Native Steam Monitor Pipeline
+        working-directory: private-monitor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PUBLIC_REPO: ${{ vars.PUBLIC_REPO || secrets.PUBLIC_REPO }}
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          FORCE_RUN: ${{ inputs.force }}
+          GIT_AUTHOR_NAME: "github-actions[bot]"
+          GIT_AUTHOR_EMAIL: "github-actions[bot]@users.noreply.github.com"
+          GIT_COMMITTER_NAME: "github-actions[bot]"
+          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
+        run: |
+          python monitor.py
+
+      # Copia o resultado produzido pela lógica privada para a raiz do repo público.
+      - name: Copy generated versions.json to Public Repository
+        run: |
+          if [ ! -f private-monitor/versions.json ]; then
+            echo "::error::private-monitor/versions.json was not generated."
+            exit 1
+          fi
+          cp private-monitor/versions.json ./versions.json
+
+      # Publica a atualização no próprio repositório público.
+      - name: Commit updated versions.json to main
+        run: |
+          git add versions.json
+          if git diff --staged --quiet; then
+            echo "No changes in versions.json on main."
+          else
+            git commit -m "Update versions.json [skip ci]"
+            git push origin HEAD:main
+          fi
