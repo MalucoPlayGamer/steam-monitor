@@ -112,8 +112,8 @@ sig = "48 89 5C 24 08 57 48 83 EC 20 8B D9 E8 9F F7 FF FF 48 8B 15 40 DE 46 00"
 
 [0x103B52AA]
 name = "ProcessPendingLicenseUpdates"
-rva = "0x9D66C0"
-sig = "48 89 74 24 18 57 48 83 EC 20 48 83 B9 90 12 00 00 FF 48 8B F2 48 8B F9"
+rva = "0xA218B0"
+sig = "48 89 4C 24 08 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 E1 48 81 EC 98 00 00 00 83"
 
 [0x836FF9F0]
 name = "RecvPkt"
