@@ -12,8 +12,8 @@ sig = "4C 89 44 24 18 48 89 54 24 10 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6
 
 [0x221F0661]
 name = "CSteamUIAppControllerRunFrame"
-rva = "0x666A29"
-sig = "48 89 58 10 4C 8B F9 48 89 68 18 48 89 70 F0 48 89 78 E8 4C 89 60 E0 4C"
+rva = "0x666A20"
+sig = "48 8B C4 41 57 48 83 EC 60 48 89 58 10 4C 8B F9 48 89 68 18 48 89 70 F0"
 
 [0xB030A061]
 name = "FillInAppOverview"
